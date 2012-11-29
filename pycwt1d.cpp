@@ -153,7 +153,8 @@ double pycalc_norm(int dl,const boost::python::numeric::array& s,const wavelet_f
 
 BOOST_PYTHON_MODULE(cwt1d)
 {
-  class_<wf,boost::noncopyable>("wf",no_init);
+  class_<wf,boost::noncopyable>("wf",no_init)
+    .def("wavelet_f",&wf::wavelet_f);
   
   class_<pydog,bases<wf> >("dog")
     .def(init<>())
