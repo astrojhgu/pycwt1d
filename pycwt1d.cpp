@@ -24,6 +24,8 @@ using namespace std;
 using namespace cwt1d;
 
 typedef dog<double> pydog;
+typedef morlet<double> pymorlet;
+typedef paul<double> pypaul;
 typedef wavelet_func<double> wf;
 
 namespace
@@ -157,7 +159,14 @@ BOOST_PYTHON_MODULE(cwt1d)
     .def(init<>())
     .def(init<int>());
 
+  class_<pymorlet,bases<wf> >("morlet")
+    .def(init<>())
+    .def(init<double>());
   
+  class_<pypaul,bases<wf> >("paul")
+    .def(init<>())
+    .def(init<double>());
+
 
   def("cwt",pycwt);
   def("icwt",pyicwt);
