@@ -35,7 +35,6 @@ namespace
     initializer()
     {
       boost::python::numeric::array::set_module_and_type("numpy","ndarray");
-      cout<<boost::python::numeric::array::get_module_name()<<endl;
     }
   }_init;
 }
