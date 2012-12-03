@@ -81,10 +81,6 @@ boost::python::numeric::array pycwt(const boost::python::numeric::array& x,const
     }
   
   boost::python::numeric::array result(l);
-
-  //result.setshape(nscales,ndata);
-  cout<<extract<int>(shape[0])<<endl;
-  //cout<<o[0]<<endl;
   return result;
 }
 
@@ -133,6 +129,20 @@ boost::python::numeric::array pyicwt(const boost::python::numeric::array& x,cons
   return result;
 }
 
+boost::python::numeric::array generate_log_scales(double min_scale,double max_scale,int num_scales)
+{
+  boost::python::list l;
+  double lmin_scale=log(min_scale);
+  double lmax_scale=log(max_scale);
+  for(int i=0;i<num_scales;++i)
+    {
+      double s=exp(lmin_scale+(lmax_scale-lmin_scale)/(num_scales-1)*i);
+      l.append(s);
+    }
+  boost::python::numeric::array result(l);
+  return result;
+}
+
 double pycalc_norm(int dl,const boost::python::numeric::array& s,const wavelet_func<double>& wf)
 {
   boost::python::object shape(s.attr("shape"));
@@ -171,4 +181,5 @@ BOOST_PYTHON_MODULE(cwt1d)
   def("cwt",pycwt);
   def("icwt",pyicwt);
   def("calc_norm",pycalc_norm);
+  def("generate_log_scales",generate_log_scales);
 }
