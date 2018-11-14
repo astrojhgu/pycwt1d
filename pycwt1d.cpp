@@ -10,14 +10,14 @@
 #include <boost/python/pure_virtual.hpp>
 #include <boost/python/copy_const_reference.hpp>
 #include <boost/operators.hpp>
-#include <boost/python/numeric.hpp>
+#include <boost/python/numpy.hpp>
 #include <boost/python/list.hpp>
 #include <exception>
 #define private public
 
 using namespace boost;
 using namespace boost::python;
-using namespace boost::python::numeric;
+using namespace boost::python::numpy;
 
 #include <cwt1d_wavelets.hpp>
 using namespace std;
@@ -34,12 +34,14 @@ namespace
   public:
     initializer()
     {
-      boost::python::numeric::array::set_module_and_type("numpy","ndarray");
+      //boost::python::numeric::array::set_module_and_type("numpy","ndarray");
+      Py_Initialize();
+      numpy::initialize();
     }
   }_init;
 }
 
-boost::python::numeric::array pycwt(const boost::python::numeric::array& x,const boost::python::numeric::array& s,const wavelet_func<double>& wf)
+boost::python::numpy::ndarray pycwt(const boost::python::numpy::ndarray& x,const boost::python::numpy::ndarray& s,const wavelet_func<double>& wf)
 {
   boost::python::object shape(x.attr("shape"));
   int ndim=extract<int>(shape.attr("__len__")());
@@ -80,11 +82,11 @@ boost::python::numeric::array pycwt(const boost::python::numeric::array& x,const
       l.append(l1);
     }
   
-  boost::python::numeric::array result(l);
-  return result;
+  return boost::python::numpy::array(l);
+
 }
 
-boost::python::numeric::array pyicwt(const boost::python::numeric::array& x,const boost::python::numeric::array& s,const wavelet_func<double>& wf)
+boost::python::numpy::ndarray pyicwt(const boost::python::numpy::ndarray& x,const boost::python::numpy::ndarray& s,const wavelet_func<double>& wf)
 {
   boost::python::object shape(x.attr("shape"));
   int ndim=extract<int>(shape.attr("__len__")());
@@ -125,11 +127,11 @@ boost::python::numeric::array pyicwt(const boost::python::numeric::array& x,cons
     {
       l.append(result1(i));
     }
-  boost::python::numeric::array result(l);
-  return result;
+  return boost::python::numpy::array(l);
+  //return result;
 }
 
-boost::python::numeric::array generate_log_scales(double min_scale,double max_scale,int num_scales)
+boost::python::numpy::ndarray generate_log_scales(double min_scale,double max_scale,int num_scales)
 {
   boost::python::list l;
   double lmin_scale=log(min_scale);
@@ -139,11 +141,11 @@ boost::python::numeric::array generate_log_scales(double min_scale,double max_sc
       double s=exp(lmin_scale+(lmax_scale-lmin_scale)/(num_scales-1)*i);
       l.append(s);
     }
-  boost::python::numeric::array result(l);
-  return result;
+  return boost::python::numpy::array(l);
+  //  return result;
 }
 
-double pycalc_norm(int dl,const boost::python::numeric::array& s,const wavelet_func<double>& wf)
+double pycalc_norm(int dl,const boost::python::numpy::ndarray& s,const wavelet_func<double>& wf)
 {
   boost::python::object shape(s.attr("shape"));
   int ndim=extract<int>(shape.attr("__len__")());
