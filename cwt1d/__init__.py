@@ -6,5 +6,5 @@ if not libpath in sys.path:
     sys.path.append(libpath)
 
 
-from core import *
+from cwtcore import *
 import cwt_filter
